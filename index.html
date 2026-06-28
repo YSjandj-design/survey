@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>论文综述智能体 · 需求调研问卷</title>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-mid: #3d3d5c;
+    --ink-light: #7a7a9a;
+    --paper: #f7f6f2;
+    --paper-warm: #eeece5;
+    --accent: #c0392b;
+    --accent-soft: #f5e6e4;
+    --rule: #d4d0c8;
+    --gold: #9b7e3f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'STHeiti', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px 0 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(255,255,255,0.03) 80px,
+      rgba(255,255,255,0.03) 81px
+    );
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  header h1 {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'STSong', serif;
+    font-size: clamp(22px, 5vw, 38px);
+    font-weight: 700;
+    line-height: 1.3;
+    position: relative;
+  }
+  header h1 em {
+    color: var(--accent);
+    font-style: normal;
+  }
+  .header-sub {
+    margin-top: 14px;
+    font-size: 13px;
+    color: rgba(247,246,242,0.6);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+  .header-note {
+    margin-top: 24px;
+    display: inline-block;
+    background: rgba(192,57,43,0.2);
+    border: 1px solid rgba(192,57,43,0.4);
+    color: #f5c6c2;
+    font-size: 12px;
+    padding: 6px 18px;
+    border-radius: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Progress bar ── */
+  #progress-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--rule);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  #progress-label { font-size: 12px; color: var(--ink-light); white-space: nowrap; }
+  #progress-track {
+    flex: 1;
+    height: 3px;
+    background: var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  #progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-top: 48px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+  .section-num {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'STSong', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'STSong', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ── Question ── */
+  .q {
+    margin-bottom: 32px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .q:last-child { border-bottom: none; }
+
+  .q-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .q-label .req { color: var(--accent); margin-left: 3px; }
+  .q-hint {
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+    margin-top: -8px;
+    font-style: italic;
+  }
+
+  /* Inputs */
+  textarea, input[type="text"] {
+    width: 100%;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 300;
+    resize: vertical;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  textarea:focus, input[type="text"]:focus {
+    border-color: var(--ink-mid);
+    box-shadow: 0 0 0 3px rgba(26,26,46,0.06);
+  }
+  textarea { min-height: 100px; }
+
+  /* Radio / Checkbox */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .options.inline { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: white;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+  }
+  .opt:hover { border-color: var(--ink-mid); }
+  .opt input { margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; }
+  .opt.selected { border-color: var(--accent); background: var(--accent-soft); }
+
+  /* Scale */
+  .scale-wrap { display: flex; gap: 0; }
+  .scale-wrap label {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+  }
+  .scale-wrap label input { display: none; }
+  .scale-wrap label span {
+    display: block;
+    padding: 10px 4px;
+    border: 1px solid var(--rule);
+    border-right: none;
+    font-size: 13px;
+    color: var(--ink-mid);
+    background: white;
+    transition: background 0.15s;
+  }
+  .scale-wrap label:last-child span { border-right: 1px solid var(--rule); border-radius: 0 3px 3px 0; }
+  .scale-wrap label:first-child span { border-radius: 3px 0 0 3px; }
+  .scale-wrap label input:checked + span { background: var(--accent); color: white; border-color: var(--accent); }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  /* Submit */
+  .submit-area {
+    margin-top: 56px;
+    text-align: center;
+    padding: 40px;
+    background: var(--ink);
+    border-radius: 4px;
+    color: var(--paper);
+  }
+  .submit-area p {
+    font-size: 13px;
+    color: rgba(247,246,242,0.6);
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+  .btn-submit {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 48px;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+  .btn-submit:hover { opacity: 0.88; }
+
+  /* Thank you */
+  #thankyou {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+  }
+  #thankyou .ty-icon { font-size: 48px; margin-bottom: 16px; }
+  #thankyou h2 {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'STSong', serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  #thankyou p { color: var(--ink-mid); font-size: 14px; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .scale-wrap label span { font-size: 11px; padding: 8px 2px; }
+    .options.inline { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">研究调研 · 2025</div>
+  <h1>论文综述<em>智能体</em>需求调研</h1>
+  <p class="header-sub">面向高校在读学生 · 科研工作者</p>
+  <div class="header-note">匿名填写 · 结果仅用于产品研究 · 预计用时 10–15 分钟</div>
+</header>
+
+<div id="progress-bar-wrap">
+  <span id="progress-label">0%</span>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+</div>
+
+<div class="container">
+
+  <form id="survey-form">
+
+    <!-- ── SECTION 1: 基本信息 ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <span class="section-title">基本信息</span>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你目前的身份是？<span class="req">*</span></div>
+        <div class="options inline">
+          <label class="opt"><input type="radio" name="identity" value="student"> 在读学生</label>
+          <label class="opt"><input type="radio" name="identity" value="researcher"> 科研工作者（研究员 / 博后 / 高校教师等）</label>
+          <label class="opt"><input type="radio" name="identity" value="doctor"> 医生 / 临床医师</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你所在的学校 / 机构是？<span class="req">*</span></div>
+        <input type="text" name="school" placeholder="例如：清华大学 / 中科院某所 / 北京协和医院……">
+      </div>
+
+      <div class="q">
+        <div class="q-label">你目前的学历阶段或工作阶段？<span class="req">*</span></div>
+        <div class="options inline">
+          <label class="opt"><input type="radio" name="level" value="undergrad"> 本科在读</label>
+          <label class="opt"><input type="radio" name="level" value="master"> 硕士研究生在读</label>
+          <label class="opt"><input type="radio" name="level" value="phd"> 博士研究生在读</label>
+          <label class="opt"><input type="radio" name="level" value="postdoc"> 博士后在站</label>
+          <label class="opt"><input type="radio" name="level" value="faculty"> 老师 / 研究员</label>
+          <label class="opt"><input type="radio" name="level" value="resident"> 住院医师 / 规培中</label>
+          <label class="opt"><input type="radio" name="level" value="attending"> 主治医师及以上</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你的研究方向/专业领域是？<span class="req">*</span></div>
+        <p class="q-hint">请尽量具体，例如：计算机视觉、分子生物学、宏观经济学……</p>
+        <input type="text" name="field" placeholder="请输入你的研究方向">
+      </div>
+
+      <div class="q">
+        <div class="q-label">你平均每年需要写几篇需要大量文献调研的综述/论文？</div>
+        <div class="options inline">
+          <label class="opt"><input type="radio" name="paper_freq" value="0-1"> 0–1 篇</label>
+          <label class="opt"><input type="radio" name="paper_freq" value="2-3"> 2–3 篇</label>
+          <label class="opt"><input type="radio" name="paper_freq" value="4-6"> 4–6 篇</label>
+          <label class="opt"><input type="radio" name="paper_freq" value="7+"> 7 篇以上</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: 当前工作流 ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <span class="section-title">你现在怎么做文献综述？</span>
+      </div>
+
+      <div class="q">
+        <div class="q-label">写一篇综述，从检索文献到形成初稿，你通常花多少时间？</div>
+        <div class="options inline">
+          <label class="opt"><input type="radio" name="time_cost" value="<1week"> 1 周以内</label>
+          <label class="opt"><input type="radio" name="time_cost" value="1-2week"> 1–2 周</label>
+          <label class="opt"><input type="radio" name="time_cost" value="1month"> 约 1 个月</label>
+          <label class="opt"><input type="radio" name="time_cost" value=">1month"> 超过 1 个月</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你通常需要精读/处理多少篇文献才能完成一篇综述？</div>
+        <div class="options inline">
+          <label class="opt"><input type="radio" name="paper_count" value="<20"> 20 篇以下</label>
+          <label class="opt"><input type="radio" name="paper_count" value="20-50"> 20–50 篇</label>
+          <label class="opt"><input type="radio" name="paper_count" value="50-100"> 50–100 篇</label>
+          <label class="opt"><input type="radio" name="paper_count" value="100-200"> 100–200 篇</label>
+          <label class="opt"><input type="radio" name="paper_count" value=">200"> 200 篇以上</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你目前用哪些工具管理/阅读文献？（可多选）</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="tools" value="zotero"> Zotero</label>
+          <label class="opt"><input type="checkbox" name="tools" value="endnote"> EndNote</label>
+          <label class="opt"><input type="checkbox" name="tools" value="obsidian"> Obsidian / 笔记工具</label>
+          <label class="opt"><input type="checkbox" name="tools" value="notion"> Notion</label>
+          <label class="opt"><input type="checkbox" name="tools" value="readpaper"> ReadPaper / 知网</label>
+          <label class="opt"><input type="checkbox" name="tools" value="pubmed"> PubMed / UpToDate</label>
+          <label class="opt"><input type="checkbox" name="tools" value="ai_chat"> ChatGPT / Claude 等 AI 对话</label>
+          <label class="opt"><input type="checkbox" name="tools" value="other_tools" id="tools-other-cb"> 其他</label>
+          <input type="text" name="tools_other_text" id="tools-other-text" placeholder="请填写其他工具名称" style="display:none; margin-top:6px;">
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">把你的综述写作流程拆开来看，每个阶段的痛苦程度如何？</div>
+        <p class="q-hint">请勾选出你觉得最耗时或最让你抓狂的环节（可多选），然后在下方描述具体是卡在哪里</p>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="pain_stage" value="search"> 文献检索：找不到精准文献，关键词不知道怎么组合</label>
+          <label class="opt"><input type="checkbox" name="pain_stage" value="access"> 文献获取：付费墙、下载繁琐</label>
+          <label class="opt"><input type="checkbox" name="pain_stage" value="screening"> 初步筛选：摘要看不完，不知道哪些值得精读</label>
+          <label class="opt"><input type="checkbox" name="pain_stage" value="reading"> 精读理解：读完忘，笔记乱，跟不上论文逻辑</label>
+          <label class="opt"><input type="checkbox" name="pain_stage" value="synthesis"> 综合归纳：读了很多，但不知道怎么串联成一条线</label>
+          <label class="opt"><input type="checkbox" name="pain_stage" value="gap"> 发现研究空白：不知道领域内什么问题还没被解决</label>
+          <label class="opt"><input type="checkbox" name="pain_stage" value="writing"> 动笔写作：有想法但不知道如何组织成学术语言</label>
+          <label class="opt"><input type="checkbox" name="pain_stage" value="citation"> 引用管理：格式错误、漏引、重复</label>
+        </div>
+        <div style="margin-top: 12px;">
+          <textarea name="pain_points" placeholder="具体说说你最痛苦的那个瞬间——比如：我曾经为了找一篇方法论文献找了三天、读完50篇之后还是不知道怎么写第一段……"></textarea>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你从文献数据库下载 PDF 的主要渠道？（可多选）</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="pdf_source" value="school_db"> 学校付费数据库（Web of Science、Elsevier 等）</label>
+          <label class="opt"><input type="checkbox" name="pdf_source" value="medical_db"> 医院 / 医学数据库（PubMed、UpToDate、万方医学等）</label>
+          <label class="opt"><input type="checkbox" name="pdf_source" value="sci-hub"> Sci-Hub</label>
+          <label class="opt"><input type="checkbox" name="pdf_source" value="arxiv"> arXiv / 预印本</label>
+          <label class="opt"><input type="checkbox" name="pdf_source" value="cnki"> 中国知网</label>
+          <label class="opt"><input type="checkbox" name="pdf_source" value="author"> 直接联系作者</label>
+          <label class="opt"><input type="checkbox" name="pdf_source" value="other_db"> 其他</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: AI 使用现状 ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <span class="section-title">你和 AI 的现状</span>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你目前有没有在科研中使用 AI 工具？</div>
+        <div class="options inline">
+          <label class="opt"><input type="radio" name="ai_usage" value="heavy"> 大量使用</label>
+          <label class="opt"><input type="radio" name="ai_usage" value="some"> 偶尔用</label>
+          <label class="opt"><input type="radio" name="ai_usage" value="explore"> 在探索中</label>
+          <label class="opt"><input type="radio" name="ai_usage" value="none"> 基本不用</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你现在用 AI 做文献相关的哪些事？（可多选）</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="abstract"> 读摘要 / 快速理解论文</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="translate"> 翻译外文文献</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="summarize"> 让 AI 总结单篇文章</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="multi_sum"> 让 AI 跨文献比较 / 汇总</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="write"> 辅助撰写段落或综述草稿</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="search"> 用 AI 搜索推荐相关文献</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="report"> 整理文献调研结果，用于向导师汇报</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="evaluate"> 研究评价：对当前领域进展给出分析评价</label>
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="other_task" id="ai-tasks-other-cb"> 其他</label>
+          <input type="text" name="ai_tasks_other_text" id="ai-tasks-other-text" placeholder="请填写其他用途" style="display:none; margin-top:6px;">
+          <label class="opt"><input type="checkbox" name="ai_tasks" value="none"> 我没有用 AI 做这些</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你有没有自己搭建过 AI 辅助文献处理的工作流？</div>
+        <p class="q-hint">比如：用 Zotero 导出文献后喂给 GPT、用 Obsidian 插件联动 AI、写过 prompt 模板……</p>
+        <div class="options">
+          <label class="opt"><input type="radio" name="diy_workflow" value="yes_detailed"> 有，而且已经比较完善，我来详细描述</label>
+          <label class="opt"><input type="radio" name="diy_workflow" value="yes_simple"> 有，但比较粗糙/临时</label>
+          <label class="opt"><input type="radio" name="diy_workflow" value="trying"> 正在尝试摸索</label>
+          <label class="opt"><input type="radio" name="diy_workflow" value="no"> 没有，都是临时用</label>
+        </div>
+        <div style="margin-top: 10px;">
+          <textarea name="diy_workflow_detail" placeholder="如果有，请描述你的工作流是什么样的，用了哪些工具/步骤……这非常有参考价值"></textarea>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你用过以下哪些专门的 AI 文献工具？（可多选）</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="ai_tools" value="elicit"> Elicit</label>
+          <label class="opt"><input type="checkbox" name="ai_tools" value="consensus"> Consensus</label>
+          <label class="opt"><input type="checkbox" name="ai_tools" value="perplexity"> Perplexity</label>
+          <label class="opt"><input type="checkbox" name="ai_tools" value="semantic"> Semantic Scholar</label>
+          <label class="opt"><input type="checkbox" name="ai_tools" value="deepresearch"> GPT Deep Research / Gemini Deep Research</label>
+          <label class="opt"><input type="checkbox" name="ai_tools" value="kimi"> Kimi / 月之暗面</label>
+          <label class="opt"><input type="checkbox" name="ai_tools" value="other_ai" id="ai-tools-other-cb"> 其他</label>
+          <input type="text" name="ai_tools_other_text" id="ai-tools-other-text" placeholder="请填写其他工具名称" style="display:none; margin-top:6px;">
+          <label class="opt"><input type="checkbox" name="ai_tools" value="none_ai_tools"> 都没用过</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">这些 AI 工具用下来，最让你失望/不满的地方是什么？</div>
+        <p class="q-hint">比如：幻觉、引用不准、不够专业、无法访问付费文献、不理解领域术语……</p>
+        <textarea name="ai_disappointment" placeholder="详细说说你踩过的坑……"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你认为 AI 在学术写作中的合理边界在哪里？</div>
+        <p class="q-hint">目前学界普遍允许 AI 润色语言，但整篇代写被视为违规。你自己真实的使用边界是什么？你会在意导师或期刊知道吗？</p>
+        <textarea name="ai_ethics" placeholder="说说你的真实想法，不用顾虑，这里是匿名的……"></textarea>
+      </div>
+    </div>
+
+    <!-- ── SECTION 4: 核心需求 ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <span class="section-title">你真正想要什么？</span>
+      </div>
+
+      <div class="q">
+        <div class="q-label">如果有一个智能体，你希望它能做到以下哪些事？（可多选，请在下方描述框说明哪个最重要）</div>
+        <p class="q-hint">勾选所有你想要的功能，然后在文字框里说说你最在乎哪一两个、为什么。</p>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="desired" value="find_papers"> 精准检索并推荐我领域内的高质量文献（含付费库）</label>
+          <label class="opt"><input type="checkbox" name="desired" value="read_bulk"> 批量阅读 100+ 篇 PDF，提炼关键信息</label>
+          <label class="opt"><input type="checkbox" name="desired" value="compare"> 跨文献对比（研究方法、结论、局限性等）</label>
+          <label class="opt"><input type="checkbox" name="desired" value="timeline"> 自动梳理领域的研究脉络/时间线</label>
+          <label class="opt"><input type="checkbox" name="desired" value="gap"> 识别研究空白和未解问题</label>
+          <label class="opt"><input type="checkbox" name="desired" value="structure"> 辅助生成综述的结构大纲</label>
+          <label class="opt"><input type="checkbox" name="desired" value="draft"> 生成有引用支撑的初稿段落（可改写/润色）</label>
+          <label class="opt"><input type="checkbox" name="desired" value="citation"> 自动生成规范引用格式</label>
+          <label class="opt"><input type="checkbox" name="desired" value="qa"> 针对我的一批文献做问答（"这几篇里有没有人研究过 X？"）</label>
+        </div>
+        <div style="margin-top: 12px;">
+          <textarea name="desired_detail" placeholder="请详细说明你最想要哪些功能，以及你真正期望的使用场景……"></textarea>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你认为这个智能体最关键的能力是什么？（用自己的话说）</div>
+        <p class="q-hint">不要局限于上面的选项，说说你真正的理想状态。</p>
+        <textarea name="core_need" placeholder="例如：我希望它能像一个懂我领域的助理，我给它一堆 PDF，它能告诉我……"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你能接受 AI 生成综述初稿的程度？</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="ai_accept" value="no"> 完全不能接受，我要全部自己写</label>
+          <label class="opt"><input type="radio" name="ai_accept" value="outline"> 只接受 AI 帮我整理大纲和笔记</label>
+          <label class="opt"><input type="radio" name="ai_accept" value="paragraph"> 可以接受 AI 生成段落，但我会大量改写</label>
+          <label class="opt"><input type="radio" name="ai_accept" value="draft"> 可以接受 AI 生成初稿，我在此基础上修改润色</label>
+          <label class="opt"><input type="radio" name="ai_accept" value="full"> 如果质量够好，全文 AI 生成我也能接受（用于内部/草稿）</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">如果要把 100–200 篇 PDF 传给智能体处理，你对它的哪些方面最担心？</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="concerns" value="hallucination"> 产生幻觉，引用了不存在或错误的内容</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="shallow"> 总结太浅，无法抓住核心学术贡献</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="privacy"> 数据隐私，文献内容是否会被上传/泄露</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="domain"> 不懂我的细分领域，理解出错</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="miss"> 遗漏重要文献或重要观点</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="cost"> 使用成本太高</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="speed"> 处理速度太慢</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 5: 使用场景细节 ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <span class="section-title">使用场景与习惯</span>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你更希望这个工具是什么形态？</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="product_form" value="web"> 网页版，上传 PDF 直接用</label>
+          <label class="opt"><input type="radio" name="product_form" value="plugin"> Zotero / Obsidian 插件，嵌入现有工作流</label>
+          <label class="opt"><input type="radio" name="product_form" value="desktop"> 桌面软件，本地处理数据</label>
+          <label class="opt"><input type="radio" name="product_form" value="api"> API 接口，自己接入</label>
+          <label class="opt"><input type="radio" name="product_form" value="any"> 无所谓，好用就行</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label">描述一下你最理想的综述写作流程——AI 在哪个环节介入、做什么、你负责什么？</div>
+        <p class="q-hint">请尽量具体。比如："我希望自己负责检索和下载，然后把 PDF 丢给 AI，让它先帮我按研究方法分类，再生成一张对比表，最后我根据表格自己写……" 医生用户可以描述：临床指南撰写、病例综述、科室汇报等场景。</p>
+        <textarea name="ideal_workflow" placeholder="描述你的理想流程，越细越好……" style="min-height: 140px;"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">如果这个智能体真的做出来了，你会在什么具体场景下第一个打开它？</div>
+        <p class="q-hint">比如：开题前调研、写毕业论文引言、组会前整理最新进展、给导师写汇报；或医生：撰写病例报告、准备科室指南更新、申请课题前的文献调研……</p>
+        <textarea name="first_use_scene" placeholder="举一个最具体的使用场景……"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你的导师 / 科室主任 / 期刊对 AI 辅助写作的态度如何？这对你的使用意愿有多大影响？</div>
+        <textarea name="supervisor_attitude" placeholder="说说你所在的学术 / 临床环境对 AI 的态度，以及这对你实际使用有什么限制……"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你愿意为这样一个工具每月支付多少钱？</div>
+        <div class="options inline">
+          <label class="opt"><input type="radio" name="price" value="free"> 只用免费版</label>
+          <label class="opt"><input type="radio" name="price" value="<50"> ¥50 以内</label>
+          <label class="opt"><input type="radio" name="price" value="50-100"> ¥50–100</label>
+          <label class="opt"><input type="radio" name="price" value="100-200"> ¥100–200</label>
+          <label class="opt"><input type="radio" name="price" value=">200"> ¥200 以上（如果真的好用）</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 6: 开放题 ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <span class="section-title">你还想说的</span>
+      </div>
+
+      <div class="q">
+        <div class="q-label">请举一个你亲身经历的具体故事：那一刻你强烈感觉"要是有个工具能帮我做这件事就好了"</div>
+        <p class="q-hint">不要泛泛而谈，给我一个场景：你在做什么、卡在哪、当时是什么感受、你最希望有什么工具能出现……这是整份问卷最有价值的问题。</p>
+        <textarea name="wish_moment" placeholder="例如：那是写开题的第二周，我已经下了80篇PDF，但根本不知道从哪里开始读，我希望有个东西能……" style="min-height: 140px;"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">你认为目前所有 AI 文献工具都在犯的同一个错误是什么？</div>
+        <textarea name="common_mistake" placeholder="你的批评性意见非常重要……"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">还有什么你想补充的，或者你觉得我们忘记问的重要问题？</div>
+        <textarea name="extra" placeholder="任何想法都欢迎……"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-label">如果我们后续想深度访谈你，你愿意留下联系方式吗？（完全可选）</div>
+        <p class="q-hint">微信号、邮箱均可。我们会在产品测试阶段优先邀请你体验。</p>
+        <input type="text" name="contact" placeholder="选填：微信号 / 邮箱">
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <p>感谢你的认真作答。你的每一个回答都会直接影响这个工具的设计方向。</p>
+      <button type="submit" class="btn-submit">提交问卷</button>
+    </div>
+
+  </form>
+
+  <div id="thankyou">
+    <div class="ty-icon">🎓</div>
+    <h2>谢谢你的宝贵意见！</h2>
+    <p>你的回答已经记录。<br>如果后续有深度访谈机会，我们会主动联系你。</p>
+  </div>
+
+</div>
+
+<script>
+  // Progress tracking
+  const form = document.getElementById('survey-form');
+  const fill = document.getElementById('progress-fill');
+  const label = document.getElementById('progress-label');
+
+  function updateProgress() {
+    const sections = 6;
+    const answered = new Set();
+    form.querySelectorAll('input:checked').forEach(el => answered.add(el.closest('.q')));
+    form.querySelectorAll('textarea').forEach(el => { if (el.value.trim()) answered.add(el.closest('.q')); });
+    form.querySelectorAll('input[type="text"]').forEach(el => { if (el.value.trim()) answered.add(el.closest('.q')); });
+    const total = form.querySelectorAll('.q').length;
+    const pct = Math.round((answered.size / total) * 100);
+    fill.style.width = pct + '%';
+    label.textContent = pct + '%';
+  }
+
+  // Show/hide "其他" text inputs
+  const otherPairs = [
+    ['tools-other-cb', 'tools-other-text'],
+    ['ai-tasks-other-cb', 'ai-tasks-other-text'],
+    ['ai-tools-other-cb', 'ai-tools-other-text'],
+  ];
+  otherPairs.forEach(([cbId, txtId]) => {
+    const cb = document.getElementById(cbId);
+    const txt = document.getElementById(txtId);
+    if (cb && txt) {
+      cb.addEventListener('change', () => {
+        txt.style.display = cb.checked ? 'block' : 'none';
+        if (cb.checked) txt.focus();
+      });
+    }
+  });
+
+  // Option highlight
+  form.addEventListener('change', e => {
+    if (e.target.type === 'radio') {
+      const name = e.target.name;
+      form.querySelectorAll(`[name="${name}"]`).forEach(r => r.closest('.opt').classList.remove('selected'));
+      e.target.closest('.opt').classList.add('selected');
+    }
+    if (e.target.type === 'checkbox') {
+      e.target.closest('.opt').classList.toggle('selected', e.target.checked);
+    }
+    updateProgress();
+  });
+
+  form.addEventListener('input', updateProgress);
+
+  // ★ 把这个 URL 替换成你部署好的 Cloudflare Worker 地址
+  const WORKER_URL = 'https://survey-proxy.yutongsuejandj.workers.dev';
+
+  // Submit
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('.btn-submit');
+    btn.textContent = '提交中…';
+    btn.disabled = true;
+
+    // 收集表单数据
+    const formData = {};
+    // Radio buttons
+    form.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+      formData[el.name] = el.value;
+    });
+    // Checkboxes (合并为数组)
+    const cbGroups = {};
+    form.querySelectorAll('input[type="checkbox"]:checked').forEach(el => {
+      if (!cbGroups[el.name]) cbGroups[el.name] = [];
+      cbGroups[el.name].push(el.value);
+    });
+    Object.assign(formData, cbGroups);
+    // Text inputs
+    form.querySelectorAll('input[type="text"]').forEach(el => {
+      if (el.value.trim()) formData[el.name] = el.value.trim();
+    });
+    // Textareas
+    form.querySelectorAll('textarea').forEach(el => {
+      if (el.value.trim()) formData[el.name] = el.value.trim();
+    });
+
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('提交失败');
+      form.style.display = 'none';
+      document.getElementById('thankyou').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      btn.textContent = '提交问卷';
+      btn.disabled = false;
+      alert('提交失败，请检查网络后重试。');
+    }
+  });
+</script>
+
+</body>
+</html>

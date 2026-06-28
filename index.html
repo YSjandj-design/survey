@@ -504,15 +504,29 @@
       </div>
 
       <div class="q">
-        <div class="q-label">这些 AI 工具用下来，最让你失望/不满的地方是什么？</div>
-        <p class="q-hint">比如：幻觉、引用不准、不够专业、无法访问付费文献、不理解领域术语……</p>
-        <textarea name="ai_disappointment" placeholder="详细说说你踩过的坑……"></textarea>
+        <div class="q-label">这些 AI 工具用下来，最让你失望/不满的地方是什么？（可多选）</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="hallucination"> 经常产生幻觉，编造不存在的文献或数据</label>
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="citation_wrong"> 引用不准确，张冠李戴</label>
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="too_shallow"> 总结太浅，抓不住核心学术贡献</label>
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="no_paywall"> 无法访问付费文献</label>
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="no_domain"> 不理解我的细分领域术语</label>
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="no_chinese"> 中文学术内容支持差</label>
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="format_bad"> 输出格式不规范，无法直接用</label>
+          <label class="opt"><input type="checkbox" name="ai_disappointment" value="other_disapp"> 其他</label>
+        </div>
+        <input type="text" name="ai_disappointment_other" placeholder="其他失望之处（选填）" style="margin-top:8px;">
       </div>
 
       <div class="q">
-        <div class="q-label">你认为 AI 在学术写作中的合理边界在哪里？</div>
-        <p class="q-hint">目前学界普遍允许 AI 润色语言，但整篇代写被视为违规。你自己真实的使用边界是什么？你会在意导师或期刊知道吗？</p>
-        <textarea name="ai_ethics" placeholder="说说你的真实想法，不用顾虑，这里是匿名的……"></textarea>
+        <div class="q-label">你自己实际使用 AI 写作的边界在哪里？</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="ai_ethics" value="polish_only"> 只用 AI 润色语言和语法</label>
+          <label class="opt"><input type="radio" name="ai_ethics" value="outline_notes"> 用 AI 整理笔记和大纲，写作全部自己来</label>
+          <label class="opt"><input type="radio" name="ai_ethics" value="draft_rewrite"> 让 AI 生成初稿，但我会大幅改写</label>
+          <label class="opt"><input type="radio" name="ai_ethics" value="draft_light_edit"> 让 AI 生成初稿，我只做小幅修改</label>
+          <label class="opt"><input type="radio" name="ai_ethics" value="depends"> 看情况，内部文档随意，发表论文严格</label>
+        </div>
       </div>
     </div>
 
@@ -543,9 +557,15 @@
       </div>
 
       <div class="q">
-        <div class="q-label">你认为这个智能体最关键的能力是什么？（用自己的话说）</div>
-        <p class="q-hint">不要局限于上面的选项，说说你真正的理想状态。</p>
-        <textarea name="core_need" placeholder="例如：我希望它能像一个懂我领域的助理，我给它一堆 PDF，它能告诉我……"></textarea>
+        <div class="q-label">你认为这个智能体最关键的能力是什么？（选最重要的 1-2 个）</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="core_need" value="accuracy"> 准确性：绝不编造，每句话都有出处</label>
+          <label class="opt"><input type="checkbox" name="core_need" value="domain_depth"> 领域深度：真正理解我的细分方向</label>
+          <label class="opt"><input type="checkbox" name="core_need" value="bulk_process"> 批量处理：一次吃下 100+ 篇 PDF</label>
+          <label class="opt"><input type="checkbox" name="core_need" value="insight"> 洞察力：能发现文献间的联系和矛盾</label>
+          <label class="opt"><input type="checkbox" name="core_need" value="easy_use"> 易用性：不需要复杂操作，上手就能用</label>
+          <label class="opt"><input type="checkbox" name="core_need" value="output_quality"> 输出质量：生成的内容接近可发表水平</label>
+        </div>
       </div>
 
       <div class="q">
@@ -594,7 +614,7 @@
       <div class="q">
         <div class="q-label">描述一下你最理想的综述写作流程——AI 在哪个环节介入、做什么、你负责什么？</div>
         <p class="q-hint">请尽量具体。比如："我希望自己负责检索和下载，然后把 PDF 丢给 AI，让它先帮我按研究方法分类，再生成一张对比表，最后我根据表格自己写……" 医生用户可以描述：临床指南撰写、病例综述、科室汇报等场景。</p>
-        <textarea name="ideal_workflow" placeholder="描述你的理想流程，越细越好……" style="min-height: 140px;"></textarea>
+        <textarea name="ideal_workflow" placeholder="简单描述即可，比如：我下载PDF→丢给AI分类→AI生成对比表→我自己写"></textarea>
       </div>
 
       <div class="q">
@@ -604,8 +624,14 @@
       </div>
 
       <div class="q">
-        <div class="q-label">你的导师 / 科室主任 / 期刊对 AI 辅助写作的态度如何？这对你的使用意愿有多大影响？</div>
-        <textarea name="supervisor_attitude" placeholder="说说你所在的学术 / 临床环境对 AI 的态度，以及这对你实际使用有什么限制……"></textarea>
+        <div class="q-label">你的导师 / 科室主任对 AI 辅助写作的态度如何？</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="supervisor_attitude" value="support"> 支持使用，鼓励探索</label>
+          <label class="opt"><input type="radio" name="supervisor_attitude" value="ok_private"> 默许，但不公开讨论</label>
+          <label class="opt"><input type="radio" name="supervisor_attitude" value="cautious"> 谨慎，只允许润色</label>
+          <label class="opt"><input type="radio" name="supervisor_attitude" value="against"> 明确反对</label>
+          <label class="opt"><input type="radio" name="supervisor_attitude" value="unknown"> 没表态 / 不清楚</label>
+        </div>
       </div>
 
       <div class="q">
@@ -630,17 +656,24 @@
       <div class="q">
         <div class="q-label">请举一个你亲身经历的具体故事：那一刻你强烈感觉"要是有个工具能帮我做这件事就好了"</div>
         <p class="q-hint">不要泛泛而谈，给我一个场景：你在做什么、卡在哪、当时是什么感受、你最希望有什么工具能出现……这是整份问卷最有价值的问题。</p>
-        <textarea name="wish_moment" placeholder="例如：那是写开题的第二周，我已经下了80篇PDF，但根本不知道从哪里开始读，我希望有个东西能……" style="min-height: 140px;"></textarea>
+        <textarea name="wish_moment" placeholder="简单描述一个场景即可，一两句话就行"></textarea>
       </div>
 
       <div class="q">
-        <div class="q-label">你认为目前所有 AI 文献工具都在犯的同一个错误是什么？</div>
-        <textarea name="common_mistake" placeholder="你的批评性意见非常重要……"></textarea>
+        <div class="q-label">你认为目前所有 AI 文献工具都在犯的同一个错误是什么？（可多选）</div>
+        <div class="options">
+          <label class="opt"><input type="checkbox" name="common_mistake" value="not_accurate"> 不够准确，不能完全信任</label>
+          <label class="opt"><input type="checkbox" name="common_mistake" value="not_deep"> 理解太浅，像在做搬运而非研究</label>
+          <label class="opt"><input type="checkbox" name="common_mistake" value="no_real_pdf"> 不能直接处理我自己的 PDF 文献库</label>
+          <label class="opt"><input type="checkbox" name="common_mistake" value="bad_workflow"> 无法融入现有工作流（Zotero 等）</label>
+          <label class="opt"><input type="checkbox" name="common_mistake" value="one_size"> 不区分学科，通用模板套所有领域</label>
+          <label class="opt"><input type="checkbox" name="common_mistake" value="no_source"> 不标注信息来源，无法验证</label>
+        </div>
       </div>
 
       <div class="q">
         <div class="q-label">还有什么你想补充的，或者你觉得我们忘记问的重要问题？</div>
-        <textarea name="extra" placeholder="任何想法都欢迎……"></textarea>
+        <textarea name="extra" placeholder="选填，一两句话即可"></textarea>
       </div>
 
       <div class="q">
